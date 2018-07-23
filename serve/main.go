@@ -29,7 +29,7 @@ func aboutMarkdownFunc(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	name, _ := os.Hostname()
-	port := "80"
+	port := "8080"
 
 	url := "http://" + name + ":" + port + "/"
 	fmt.Println(url)
