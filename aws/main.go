@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-  "encoding/json"
+	"encoding/json"
 	"fmt"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -12,7 +12,7 @@ import (
 	"os"
 )
 
-func HandleRequest(ctx context.Context, event events.IoTButtonEvent) (error) {
+func HandleRequest(ctx context.Context, event events.IoTButtonEvent) error {
 	fmt.Println("creating session")
 	sess := session.Must(session.NewSession())
 	fmt.Println("session created")
@@ -35,14 +35,14 @@ func HandleRequest(ctx context.Context, event events.IoTButtonEvent) (error) {
 	// Pretty-print the response data.
 	fmt.Println(resp)
 
-  eventAsJson, err := json.Marshal(event)
-    if err != nil {
-        panic (err)
-    }
+	eventAsJson, err := json.Marshal(event)
+	if err != nil {
+		panic(err)
+	}
 
 	fmt.Printf("Here is the full event: %s", string(eventAsJson))
 
-  return nil
+	return nil
 }
 
 func main() {
