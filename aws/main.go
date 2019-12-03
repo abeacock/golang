@@ -12,39 +12,33 @@ import (
 	"os"
 )
 
-func HandleRequest(ctx context.Context, event events.IoTButtonEvent) error {
-	fmt.Println("creating session")
+func HandleButtonPress(ctx context.Context, event events.IoTButtonEvent) error {
 	sess := session.Must(session.NewSession())
-	fmt.Println("session created")
-
 	svc := sns.New(sess)
-	fmt.Println("service created")
 
-	params := &sns.PublishInput{
-		Message:     aws.String("The user did a " + event.ClickType + " press"),
+	eventAsJson, err := json.Marshal(event)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	message := fmt.Sprintf("Hello from your IoT Button. Here is the full event: %s", string(eventAsJson))
+
+	params := &sns.PublishInput {
+		Message:     aws.String(message),
 		PhoneNumber: aws.String(os.Getenv("PhoneNumber")),
 	}
 	resp, err := svc.Publish(params)
 
 	if err != nil {
-		// Print the error, cast err to awserr.Error to get the Code and
-		// Message from an error.
+		// Print the error, cast err to awserr.Error to get the Code and Message from an error.
 		fmt.Println(err.Error())
 	}
 
-	// Pretty-print the response data.
 	fmt.Println(resp)
-
-	eventAsJson, err := json.Marshal(event)
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Printf("Here is the full event: %s", string(eventAsJson))
 
 	return nil
 }
 
 func main() {
-	lambda.Start(HandleRequest)
+	lambda.Start(HandleButtonPress)
 }
