@@ -4,10 +4,9 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
+	"net"
 	"net/http"
-	"os"
 
-	"github.com/atotto/clipboard"
 	"github.com/russross/blackfriday"
 )
 
@@ -28,12 +27,15 @@ func aboutMarkdownFunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	name, _ := os.Hostname()
+	conn, _ := net.Dial("udp", "8.8.8.8:80")
+	conn.Close()
+	localAddr := conn.LocalAddr().(*net.UDPAddr)
+	name := localAddr.IP.String()
+
 	port := "8080"
 
 	url := "http://" + name + ":" + port + "/"
 	fmt.Println(url)
-	clipboard.WriteAll(string(url))
 
 	http.HandleFunc("/about", aboutMarkdownFunc)
 	http.HandleFunc("/aboutHtml", aboutHtmlFunc)
