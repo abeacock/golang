@@ -4,12 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
+
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sns"
-	"os"
 )
 
 func HandleButtonPress(ctx context.Context, event events.IoTButtonEvent) error {
@@ -21,9 +22,9 @@ func HandleButtonPress(ctx context.Context, event events.IoTButtonEvent) error {
 		fmt.Println(err)
 	}
 
-	message := fmt.Sprintf("Hello from your IoT Button. Here is the full event: %s", string(eventAsJson))
+	message := fmt.Sprintf("Hello from your IoT Button, here is the full event: %s", string(eventAsJson))
 
-	params := &sns.PublishInput {
+	params := &sns.PublishInput{
 		Message:     aws.String(message),
 		PhoneNumber: aws.String(os.Getenv("PhoneNumber")),
 	}
