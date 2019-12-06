@@ -11,27 +11,36 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sns"
+	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
 func HandleButtonPress(ctx context.Context, event events.IoTButtonEvent) error {
 	sess := session.Must(session.NewSession())
-	svc := sns.New(sess)
 
 	eventAsJson, err := json.Marshal(event)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	message := fmt.Sprintf("Hello from your IoT Button, here is the full event: %s", string(eventAsJson))
+	// Hello from your IoT Button, here is the full event: %s
+	messageTemplate := os.Getenv("MessageTemplate")
+	message := fmt.Sprintf(messageTemplate, string(eventAsJson))
 
+	systemsManager := ssm.New(sess)
+	parameterKey := "PhoneNumber"
+	param, err := systemsManager.GetParameter(&ssm.GetParameterInput{
+		Name: &parameterKey,
+	})
+	phoneNumber := *param.Parameter.Value
+
+	notificationService := sns.New(sess)
 	params := &sns.PublishInput{
 		Message:     aws.String(message),
-		PhoneNumber: aws.String(os.Getenv("PhoneNumber")),
+		PhoneNumber: aws.String(phoneNumber),
 	}
-	resp, err := svc.Publish(params)
+	resp, err := notificationService.Publish(params)
 
 	if err != nil {
-		// Print the error, cast err to awserr.Error to get the Code and Message from an error.
 		fmt.Println(err.Error())
 	}
 
