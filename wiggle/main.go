@@ -11,6 +11,6 @@ func main() {
 
 	for true {
 		robotgo.MoveMouseSmooth(rand.Intn(x), rand.Intn(y))
-		time.Sleep(time.Second * 5)
+		time.Sleep(time.Second * 2)
 	}
 }
