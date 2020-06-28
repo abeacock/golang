@@ -17,14 +17,14 @@ import (
 func HandleButtonPress(ctx context.Context, event events.IoTButtonEvent) error {
 	sess := session.Must(session.NewSession())
 
-	eventAsJson, err := json.Marshal(event)
+	eventAsJSON, err := json.Marshal(event)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// Hello from your IoT Button, here is the full event: %s
 	messageTemplate := os.Getenv("MessageTemplate")
-	message := fmt.Sprintf(messageTemplate, string(eventAsJson))
+	message := fmt.Sprintf(messageTemplate, string(eventAsJSON))
 
 	systemsManager := ssm.New(sess)
 	parameterKey := "PhoneNumber"

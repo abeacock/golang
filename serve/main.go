@@ -37,8 +37,8 @@ func main() {
 	url := "http://" + name + ":" + port + "/"
 	fmt.Println(url)
 
-	http.HandleFunc("/about", aboutMarkdownFunc)
 	http.HandleFunc("/aboutHtml", aboutHtmlFunc)
+	http.HandleFunc("/about", aboutMarkdownFunc)
 	http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 
 	http.ListenAndServe(":"+port, nil)

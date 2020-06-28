@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/go-vgo/robotgo"
 	"math/rand"
 	"time"
+
+	"github.com/go-vgo/robotgo"
 )
 
 func main() {
