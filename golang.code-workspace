@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "aws"
+		},
+		{
+			"path": "serve"
+		},
+		{
+			"path": "wiggle"
+		}
+	]
+}
