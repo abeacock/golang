@@ -14,7 +14,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
-func HandleButtonPress(ctx context.Context, event events.IoTButtonEvent) error {
+func handleButtonPress(ctx context.Context, event events.IoTButtonEvent) error {
 	sess := session.Must(session.NewSession())
 
 	eventAsJSON, err := json.Marshal(event)
@@ -50,5 +50,5 @@ func HandleButtonPress(ctx context.Context, event events.IoTButtonEvent) error {
 }
 
 func main() {
-	lambda.Start(HandleButtonPress)
+	lambda.Start(handleButtonPress)
 }
