@@ -1,3 +1,2 @@
-/aws/main.zip
-/aws/main
-/aws/out
+*.zip
+*.exe
