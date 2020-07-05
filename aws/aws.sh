@@ -19,13 +19,18 @@ echo "Building Go function..."
 go build -v -ldflags="-s -w" -o lambda lambda.go
 haltOnFailure "go build"
 
-echo "Setting permissions..."
-chmod uga+x lambda
-haltOnFailure "chmod"
+if [[ "$OSTYPE" == "msys" ]]; then
+	echo "MSYS detected, using build-lambda-zip..."
+	build-lambda-zip -o lambda.zip lambda
+else
+	echo "Setting permissions..."
+	chmod uga+x lambda
+	haltOnFailure "chmod"
 
-echo "Preparing zip..."
-zip --dot-size 1024k lambda.zip lambda
-haltOnFailure "zip"
+	echo "Preparing zip..."
+	zip --dot-size 1024k lambda.zip lambda
+	haltOnFailure "zip"
+fi
 
 echo "Uploading to AWS..."
 aws lambda update-function-code --function-name IoT-Button_send-text-message --zip-file fileb://lambda.zip
