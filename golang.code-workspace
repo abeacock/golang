@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "wiggle"
+		},
+		{
+			"path": "lang"
 		}
 	]
 }
